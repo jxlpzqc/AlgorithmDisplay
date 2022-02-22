@@ -1,0 +1,86 @@
+﻿<Window x:Class="KnapsackDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KnapsackDemo"
+        WindowState="Maximized"
+        mc:Ignorable="d"
+        Title="01背包演示程序 Alpha" Height="600" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="250"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="0">
+            <Label DockPanel.Dock="Left">运行速度（ms/断点）：</Label>
+            <TextBox Width="200" x:Name="speed">300</TextBox>
+        </StackPanel>
+        <local:SolutionTree x:Name="solutionTree" Grid.Row="1"></local:SolutionTree>
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ListBox  x:Name="goodList" IsHitTestVisible="False" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel  Width="{Binding ActualWidth,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <!--<ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="名称" DisplayMemberBinding="{Binding Name}" Width="100"></GridViewColumn>
+                        <GridViewColumn Header="重量" DisplayMemberBinding="{Binding Weight}" Width="80"></GridViewColumn>
+                        <GridViewColumn Header="价值" DisplayMemberBinding="{Binding Value}" Width="80"></GridViewColumn>
+                        <GridViewColumn Header="单位重量价值" DisplayMemberBinding="{Binding ValuePerWeight}" Width="80"></GridViewColumn>
+                    </GridView>
+                </ListView.View>-->
+            </ListBox>
+
+            <DockPanel Background="White"   Grid.Row="1">
+                <Image Source=".\bag.png" Margin="10,10,20,0" Height="50" DockPanel.Dock="Left" VerticalAlignment="Top"></Image>
+                <TextBlock Padding="10" FontSize="20" >
+                    <Run FontWeight="Bold">当前总价值：</Run>
+                    <Run x:Name="totalValue">N/A</Run>
+                    <LineBreak/>
+                    <Run FontWeight="Bold">容量占用：</Run>
+                    <Run x:Name="totalWeight">N/A</Run>
+                    <LineBreak/>
+                    <Run FontWeight="Bold">历史最大价值：</Run>
+                    <Run x:Name="maxValue">N/A</Run>
+                </TextBlock>
+            </DockPanel>
+
+        </Grid>
+
+        <TextBox Grid.Column="0" Grid.Row="2" TextWrapping="Wrap" x:Name="console" FontFamily="黑体" FontSize="18" ScrollViewer.VerticalScrollBarVisibility="Auto"  ScrollViewer.HorizontalScrollBarVisibility="Hidden" FontWeight="Heavy"  Background="Black" Foreground="White" Padding="10">
+            控制台准备就绪
+        </TextBox>
+        <!-- 代码区 -->
+        <Grid Grid.Row="2" Grid.Column="1">
+            <ListView Focusable="True" x:Name="code">
+            </ListView>
+        </Grid>
+
+        <TextBlock Grid.Row="3" Grid.ColumnSpan="2"  VerticalAlignment="Center" Padding="10" FontWeight="Bold" >
+            01背包-回溯法演示  
+        </TextBlock>
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="10" HorizontalAlignment="Right">
+            <Button FontSize="16" Padding="5" Margin="20,0" Click="ClearLogButton_Click">清屏</Button>
+            <Button FontSize="16" Padding="5" Margin="20,0" Click="FileButton_Click">读取文件</Button>
+            <Button FontSize="16" Padding="5" Margin="20,0" Click="AutoRunButton_Click">自动运行</Button>
+            <Button FontSize="16" Padding="5" Margin="20,0" Click="StopAutoRunButton_Click">停止自动运行</Button>
+            <Button FontSize="16" Padding="5" Margin="20,0" Click="NextButton_Click">下一步</Button>
+            <Button FontSize="16" Padding="5" Margin="20,0" Click="ExitButton_Click">退出</Button>
+        </StackPanel>
+
+    </Grid>
+</Window>

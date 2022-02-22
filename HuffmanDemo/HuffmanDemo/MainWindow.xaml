@@ -1,0 +1,116 @@
+﻿<Window x:Class="HuffmanDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HuffmanDemo"
+        WindowState="Maximized"
+        mc:Ignorable="d"
+        Keyboard.KeyUp="Window_KeyUp"
+        Title="哈夫曼树构建演示程序" Height="600" Width="1000">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="400"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Border Background="White" x:Name="dragPane" MouseLeftButtonDown="dragPane_MouseLeftButtonDown" MouseLeftButtonUp="dragPane_MouseLeftButtonUp" MouseMove="dragPane_MouseMove">
+                <local:HuffmanCanvas Padding="10" x:Name="mainCanvas" Margin="0,20,0,0"></local:HuffmanCanvas>
+                <Border.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem IsCheckable="True" IsChecked="False" x:Name="lockMenu" Click="lockMenu_Click" Header="锁定移动"></MenuItem>
+                        <MenuItem Click="BackToOriginMenuItem_Click" Header="回到原点"></MenuItem>
+                    </ContextMenu>
+                </Border.ContextMenu>
+            </Border>
+
+            
+            
+
+            <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal">
+                
+                <Label>缩放比例：</Label>
+                <Slider ValueChanged="Slider_ValueChanged" Width="200" Value="8.8" Minimum="0.6" Maximum="10"></Slider>
+                <Label>拖动画布以移动，需要禁用请右键锁定画布移动，如果节点过小，将鼠标悬停在节点上查看信息</Label>
+            </StackPanel>
+        </Grid>
+        <Grid Background="White" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="3*"/>
+            </Grid.RowDefinitions>
+            <DockPanel>
+                <Label DockPanel.Dock="Left">运行速度：</Label>
+                <TextBlock Margin="3" DockPanel.Dock="Right">
+                    <Run Text="{Binding Value,ElementName=speedSlider}"></Run>
+                    <Run>次/秒</Run>
+
+                </TextBlock>
+
+                <Slider IsSnapToTickEnabled="True" x:Name="speedSlider" TickFrequency="1" Height="20" Orientation="Horizontal" Maximum="10" Value="5" Minimum="1" SmallChange="1" TickPlacement="TopLeft"/>
+            </DockPanel>
+            <TextBox TextWrapping="Wrap" x:Name="console" FontFamily="黑体" FontSize="18" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden" FontWeight="Heavy" Grid.Row="1" Background="Black" Foreground="White" Padding="10">输出控制台准备就绪</TextBox>
+            <Grid Grid.Row="2">
+                <ListView x:Name="code" xml:space="preserve" IsHitTestVisible="False" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                    
+                    <ListViewItem>//构建哈夫曼树                                 </ListViewItem>
+                    <ListViewItem>for ( i = n + 1; i &lt;= m; i++)                                  </ListViewItem>
+                    <ListViewItem>{      </ListViewItem>
+                    <ListViewItem>	select(HT,i-1,s1,s2);//找出前i-1个节点中权值最小的节点下标             </ListViewItem>
+                    <ListViewItem>	HT[s1].parent = i;                                               </ListViewItem>
+                    <ListViewItem>	HT[s2].parent = i;                                               </ListViewItem>
+                    <ListViewItem>	HT[i].lchild = s1;                                               </ListViewItem>
+                    <ListViewItem>	HT[i].rchild = s2;                                               </ListViewItem>
+                    <ListViewItem>	HT[i].weight = HT[s1].weight + HT[s2].weight;                    </ListViewItem>
+                    <ListViewItem> }                                                              </ListViewItem>
+
+                </ListView>
+            </Grid>
+        </Grid>
+
+        <TextBlock VerticalAlignment="Center" Padding="10" FontWeight="Bold" Grid.Row="1" >
+            Huffman树构建演示程序
+        </TextBlock>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="10" HorizontalAlignment="Right">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Height" Value="32"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="Margin" Value="10,0"/>
+                    <Setter Property="Padding" Value="10,0"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Background" Value="#43a9c7"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border" Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                                    <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#2f96b4"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#2a89a4"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </StackPanel.Resources>
+            <Button Click="ReadFileButton_Click">选取文件</Button>
+            <Button Click="AutoRunButton_Click" >自动运行</Button>
+            <Button Click="StopAutoButton_Click" >停止自动</Button>
+            <Button Click="RunButton_Click">下一步（F5）</Button>
+            <Button Click="ExitButton_Click">退出程序</Button>
+        </StackPanel>
+
+    </Grid>
+</Window>
